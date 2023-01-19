@@ -34,4 +34,4 @@ add-apt-repository "${REPO_NAME}"
 apt-get update
 
 # Install required packages
-apt-get install -y  llvm-$LLVM_VERSION clang-$LLVM_VERSION lld-$LLVM_VERSION* clangd-$LLVM_VERSION
+apt-get install -y llvm-$LLVM_VERSION llvm-$LLVM_VERSION-* liblld-$LLVM_VERSION* libclang-common-$LLVM_VERSION-dev libclang-$LLVM_VERSION-dev
