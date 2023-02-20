@@ -34,4 +34,4 @@ add-apt-repository "${REPO_NAME}"
 apt-get update
 
 # Install required packages
-apt-get install -y llvm-$LLVM_VERSION llvm-$LLVM_VERSION-* liblld-$LLVM_VERSION* libpolly-$LLVM_VERSION-dev llvm
+apt-get install -y llvm-$LLVM_VERSION llvm-$LLVM_VERSION-* liblld-$LLVM_VERSION* libpolly-$LLVM_VERSION-dev
