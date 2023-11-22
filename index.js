@@ -33,7 +33,7 @@ export async function execute(cmd) {
             const installScript = path.join(__dirname, "../scripts/install_llvm.sh");
             await exec.exec(`sudo ${installScript}`);
         } else if (isMacOS) {
-            await exec.exec("brew install llvm@16")
+            await exec.exec("brew install llvm@16 zstd")
             let llvmPath = await execute("brew --prefix llvm@16");
             core.addPath(`${llvmPath}/bin`)
             // core.exportVariable('LLVM_SYS_160_PREFIX', `${llvmPath}`)
