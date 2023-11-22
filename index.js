@@ -36,6 +36,7 @@ export async function execute(cmd) {
             await exec.exec("brew install llvm@16")
             let llvmPath = await execute("brew --prefix llvm@16");
             core.addPath(`${llvmPath}/bin`)
+            core.exportVariable('LLVM_SYS_160_PREFIX', `${llvmPath}`)
         } else if (isWindows) {
             const downloadUrl = "https://github.com/mun-lang/llvm-package-windows/releases/download/v16.0.5/llvm-16.0.5-windows-x64-msvc17-mt.7z"
             core.info(`downloading LLVM from '${downloadUrl}'`)
@@ -68,6 +69,7 @@ export async function execute(cmd) {
 
             core.addPath(`${llvmPath}\\bin`)
             core.exportVariable('LIBCLANG_PATH', `${llvmPath}\\bin`)
+            core.exportVariable('LLVM_SYS_160_PREFIX', `${llvmPath}`)
         } else {
             core.setFailed(`unsupported platform '${process.platform}'`)
         }
