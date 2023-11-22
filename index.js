@@ -33,11 +33,11 @@ export async function execute(cmd) {
             const installScript = path.join(__dirname, "../scripts/install_llvm.sh");
             await exec.exec(`sudo ${installScript}`);
         } else if (isMacOS) {
-            await exec.exec("brew install llvm@14")
-            let llvmPath = await execute("brew --prefix llvm@14");
+            await exec.exec("brew install llvm@16")
+            let llvmPath = await execute("brew --prefix llvm@16");
             core.addPath(`${llvmPath}/bin`)
         } else if (isWindows) {
-            const downloadUrl = "https://github.com/mun-lang/llvm-package-windows/releases/download/v14.0.6/llvm-14.0.6-windows-x64-msvc16-mt.7z"
+            const downloadUrl = "https://github.com/mun-lang/llvm-package-windows/releases/download/v16.0.5/llvm-16.0.5-windows-x64-msvc17-mt.7z"
             core.info(`downloading LLVM from '${downloadUrl}'`)
             const downloadLocation = await tc.downloadTool(downloadUrl);
 
