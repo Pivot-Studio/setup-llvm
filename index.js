@@ -33,45 +33,26 @@ export async function execute(cmd) {
             const installScript = path.join(__dirname, "../scripts/install_llvm.sh");
             await exec.exec(`sudo ${installScript}`);
         } else if (isMacOS) {
-            await exec.exec("brew install llvm@16")
-            let llvmPath = await execute("brew --prefix llvm@16");
             let libpath = await execute("brew --prefix zstd");
-            core.addPath(`${llvmPath}/bin`)
             core.exportVariable('LIBRARY_PATH', `${libpath}/lib`)
+
+            await exec.exec("sudo port install llvm-18")
+            let llvmPath = await execute("port contents llvm-18 | grep bin | head -n 1")
+            core.addPath(llvmPath)
+
+            
+
             // core.exportVariable('LLVM_SYS_160_PREFIX', `${llvmPath}`)
         } else if (isWindows) {
-            const downloadUrl = "https://github.com/mun-lang/llvm-package-windows/releases/download/v16.0.5/llvm-16.0.5-windows-x64-msvc17-mt.7z"
+            const downloadUrl = "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.0/clang+llvm-18.1.0-x86_64-pc-windows-msvc.tar.xz"
             core.info(`downloading LLVM from '${downloadUrl}'`)
             const downloadLocation = await tc.downloadTool(downloadUrl);
 
-            core.info("Succesfully downloaded LLVM release, extracting...")
-            const llvmPath = "C:\\llvm";
-            const _7zPath = path.join(__dirname, '..', 'externals', '7zr.exe');
-            let attempt = 1;
-            while (true) {
-                const args = [
-                    "x", // extract
-                    downloadLocation,
-                    `-o${llvmPath}`
-                ]
-                const exit = await exec.exec(_7zPath, args);
-                if (exit === 2 && attempt <= 4) {
-                    attempt += 1;
-                    console.error(`Error extracting LLVM release, retrying attempt #${attempt} after 1s..`)
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                }
-                else if (exit !== 0) {
-                    throw new Error("Could not extract LLVM and Clang binaries.");
-                }
-                else {
-                    core.info("Succesfully extracted LLVM release")
-                    break;
-                }
-            }
-
+            // extract package
+            const llvmPath = await tc.extractTar(downloadLocation);
             core.addPath(`${llvmPath}\\bin`)
             core.exportVariable('LIBCLANG_PATH', `${llvmPath}\\bin`)
-            // core.exportVariable('LLVM_SYS_160_PREFIX', `${llvmPath}`)
+            // core.exportVariable('LLVM_SYS_180_PREFIX', `${llvmPath}`)
         } else {
             core.setFailed(`unsupported platform '${process.platform}'`)
         }
