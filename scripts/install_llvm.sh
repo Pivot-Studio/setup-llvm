@@ -23,14 +23,16 @@ case "$DIST_VERSION" in
     Ubuntu_20.04 )   REPO_NAME="deb http://apt.llvm.org/focal/     llvm-toolchain-focal-$LLVM_VERSION   main" ;;
     Ubuntu_22.04 )   REPO_NAME="deb http://apt.llvm.org/jammy/     llvm-toolchain-jammy-$LLVM_VERSION   main" ;;
     Ubuntu_22.10 )   REPO_NAME="deb http://apt.llvm.org/kinetic/   llvm-toolchain-kinetic-$LLVM_VERSION main" ;;
+    Ubuntu_24.04 )   REPO_NAME="deb http://apt.llvm.org/noble/   llvm-toolchain-noble-$LLVM_VERSION main" ;;
+    Ubuntu_24.10 )   REPO_NAME="deb http://apt.llvm.org/oracular/   llvm-toolchain-oracular-$LLVM_VERSION main" ;;
     * )
         echo "Distribution '$DISTRO' in version '$VERSION' is not supported by this script (${DIST_VERSION})."
         exit 2
 esac
 
 # Add the right repository for the distro
-wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-add-apt-repository "${REPO_NAME}"
+wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+add-apt-repository "${REPO_NAME}" --yes
 apt-get update
 
 # Install required packages
